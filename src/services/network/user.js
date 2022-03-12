@@ -10,3 +10,9 @@ export const getUsers = (username) => {
     }
   });
 }
+
+export const getUserById = (id) => {
+  return axios.get(`https://jsonplaceholder.typicode.com/users`, {
+    params: { id }
+  });
+}
