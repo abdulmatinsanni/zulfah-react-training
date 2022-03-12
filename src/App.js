@@ -15,6 +15,8 @@ const App = () => {
   }, [username]);
 
   const getUsers = (username) => {
+    setIsLoadingUsers(true);
+
     User.getUsers(username)
       .then((res) => {
         console.log(res.data);
@@ -51,6 +53,15 @@ const App = () => {
         </div>
       </section>
 
+      <section className="p-20 pb-0">
+        <input
+          className="w-full border border-gray-400 focus:border-pink-500 p-5 rounded-xl focus:outline-none"
+          type="text"
+          onInput={(e) => setUsername(e.target.value)}
+          placeholder="Search by username"
+        />
+      </section>
+
       {isLoadingUsers ? (
         // <div className="flex flex-col justify-center items-center h-80">
         //   <div>
@@ -76,11 +87,8 @@ const App = () => {
               role={user.username}
             />
           ))}
-        </section>
+      </section>
       )}
-
-      <h1 className="text-4xl">{username}</h1>
-      <input className="border border-blue-500 p-5" type="text" onInput={(e) => setUsername(e.target.value)}/>
     </>
   );
 };
