@@ -7,14 +7,17 @@ const userSlice = createSlice({
     isLoading: false,
   },
   reducers: {
-    createUser: (state) => {
+    populateUsers: (state, action) => {
+      state.data = action.payload.data;
+    },
+    createUser: (state, action) => {
       // Redux Toolkit allows us to write "mutating" logic in reducers. It
       // doesn't actually mutate the state because it uses the Immer library,
       // which detects changes to a "draft state" and produces a brand new
       // immutable state based off those changes
       state.data.push({
         id: Math.random(),
-        name: `John Doe ${Math.random()}`,
+        name: `${action.payload.name} ${Math.random()}`,
       });
     },
     updateUser: (state) => {
@@ -23,5 +26,5 @@ const userSlice = createSlice({
   },
 });
 
-export const { createUser, updateUser } = userSlice.actions;
+export const { populateUsers, createUser, updateUser } = userSlice.actions;
 export default userSlice;

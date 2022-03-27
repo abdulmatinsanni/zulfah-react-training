@@ -5,13 +5,13 @@ import { useEffect, useState } from "react";
 import Container from "../../shared/Container";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { createUser } from "../../../state/slices/userSlice";
+import { createUser, populateUsers } from "../../../state/slices/userSlice";
 
 const HomePage = () => {
   const [isLoadingUsers, setIsLoadingUsers] = useState(true);
 
   const [username, setUsername] = useState("");
-  const [users, setUsers] = useState([]);
+  const users = useSelector((state) => state.data);
 
   const dispatch = useDispatch();
   const state = useSelector((state) => state);
@@ -25,8 +25,7 @@ const HomePage = () => {
 
     User.getUsers(username)
       .then((res) => {
-        console.log(res.data);
-        setUsers(res.data);
+        dispatch(populateUsers({ data: res.data }));
         setIsLoadingUsers(false);
       })
       .catch((err) => {
@@ -35,21 +34,13 @@ const HomePage = () => {
       });
   };
 
-  // const getUsers = (username) => {
-  //   User.getUsers(username)
-  //     .then((res) => {
-  //       console.log(res.data);
-  //       setUsers(res.data);
-  //       setIsLoadingUsers(false);
-  //     })
-  //     .catch((err) => {
-  //       console.log(err)
-  //       setIsLoadingUsers(false);
-  //     });
-  // }
-
   const handleCreateUserBtn = () => {
-    dispatch(createUser());
+    dispatch(
+      createUser({
+        name: "Abdulmatin Sanni",
+        class: "SSS3",
+      })
+    );
   };
 
   return (
