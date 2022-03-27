@@ -1,20 +1,23 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { User } from "../../services/api";
+
+export const getUsersRequest = createAsyncThunk("user/getUsers", async () => {
+  const response = await User.getUsers();
+  return response.data;
+});
 
 const userSlice = createSlice({
   name: "user",
   initialState: {
     data: [],
     isLoading: false,
+    error: "",
   },
   reducers: {
     populateUsers: (state, action) => {
       state.data = action.payload.data;
     },
     createUser: (state, action) => {
-      // Redux Toolkit allows us to write "mutating" logic in reducers. It
-      // doesn't actually mutate the state because it uses the Immer library,
-      // which detects changes to a "draft state" and produces a brand new
-      // immutable state based off those changes
       state.data.push({
         id: Math.random(),
         name: `${action.payload.name} ${Math.random()}`,
@@ -23,6 +26,19 @@ const userSlice = createSlice({
     updateUser: (state) => {
       //
     },
+  },
+  extraReducers: (builder) => {
+    builder.addCase(getUsersRequest.pending, (state, action) => {
+      state.isLoading = true;
+    });
+    builder.addCase(getUsersRequest.fulfilled, (state, action) => {
+      state.isLoading = false;
+      state.data = action.payload;
+    });
+    builder.addCase(getUsersRequest.rejected, (state, action) => {
+      state.isLoading = false;
+      state.error = action.payload?.message || "An error occured";
+    });
   },
 });
 
