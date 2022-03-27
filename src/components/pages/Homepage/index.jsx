@@ -1,15 +1,20 @@
 import StudentCardItem from "../../../components/shared/StudentCardItem";
 import StudentCardItemSkeleton from "../../../components/shared/StudentCardItemSkeleton";
-import { User } from "../../../services/api"
+import { User } from "../../../services/api";
 import { useEffect, useState } from "react";
 import Container from "../../shared/Container";
 import { Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { createUser } from "../../../state/slices/userSlice";
 
 const HomePage = () => {
   const [isLoadingUsers, setIsLoadingUsers] = useState(true);
-  
+
   const [username, setUsername] = useState("");
   const [users, setUsers] = useState([]);
+
+  const dispatch = useDispatch();
+  const state = useSelector((state) => state);
 
   useEffect(() => {
     getUsers(username);
@@ -25,10 +30,10 @@ const HomePage = () => {
         setIsLoadingUsers(false);
       })
       .catch((err) => {
-        console.log(err)
+        console.log(err);
         setIsLoadingUsers(false);
       });
-  }
+  };
 
   // const getUsers = (username) => {
   //   User.getUsers(username)
@@ -43,6 +48,10 @@ const HomePage = () => {
   //     });
   // }
 
+  const handleCreateUserBtn = () => {
+    dispatch(createUser());
+  };
+
   return (
     <Container>
       <section className="p-20 pb-0">
@@ -53,6 +62,17 @@ const HomePage = () => {
           placeholder="Search by username"
         />
       </section>
+
+      <button
+        onClick={handleCreateUserBtn}
+        className="bg-blue-500 p-5 text-white"
+      >
+        Create User
+      </button>
+
+      <p className="bg-black p-20 text-white font-mono">
+        {JSON.stringify(state)}
+      </p>
 
       {isLoadingUsers ? (
         // <div className="flex flex-col justify-center items-center h-80">
@@ -67,20 +87,17 @@ const HomePage = () => {
 
         <section className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-10 p-20">
           {[...Array(5)].map((n, i) => (
-            <StudentCardItemSkeleton key={i}/>
+            <StudentCardItemSkeleton key={i} />
           ))}
         </section>
       ) : (
         <section className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-10 p-20">
           {users.map((user) => (
             <Link key={user.id} to={`/details/${user.id}`}>
-              <StudentCardItem
-                name={user.name}
-                role={user.username}
-              />
+              <StudentCardItem name={user.name} role={user.username} />
             </Link>
           ))}
-      </section>
+        </section>
       )}
     </Container>
   );
