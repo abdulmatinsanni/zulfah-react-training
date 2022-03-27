@@ -1,6 +1,5 @@
 import StudentCardItem from "../../../components/shared/StudentCardItem";
 import StudentCardItemSkeleton from "../../../components/shared/StudentCardItemSkeleton";
-import { User } from "../../../services/api";
 import { useEffect, useState } from "react";
 import Container from "../../shared/Container";
 import { Link } from "react-router-dom";
