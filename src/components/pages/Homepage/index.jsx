@@ -9,12 +9,9 @@ import { createUser, populateUsers } from "../../../state/slices/userSlice";
 
 const HomePage = () => {
   const [isLoadingUsers, setIsLoadingUsers] = useState(true);
-
   const [username, setUsername] = useState("");
   const users = useSelector((state) => state.data);
-
   const dispatch = useDispatch();
-  const state = useSelector((state) => state);
 
   useEffect(() => {
     getUsers(username);
@@ -60,10 +57,6 @@ const HomePage = () => {
       >
         Create User
       </button>
-
-      <p className="bg-black p-20 text-white font-mono">
-        {JSON.stringify(state)}
-      </p>
 
       {isLoadingUsers ? (
         // <div className="flex flex-col justify-center items-center h-80">
